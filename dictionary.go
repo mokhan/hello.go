@@ -28,13 +28,12 @@ func (d Dictionary) Add(word, definition string) error {
 	switch err {
 	case ErrorNotFound:
 		d[word] = definition
+		return nil
 	case nil:
 		return ErrorWordExists
 	default:
 		return err
 	}
-
-	return nil
 }
 
 func (d Dictionary) Update(word, definition string) error {
@@ -45,9 +44,12 @@ func (d Dictionary) Update(word, definition string) error {
 		return ErrorWordDoesNotExist
 	case nil:
 		d[word] = definition
+		return nil
 	default:
 		return err
 	}
+}
 
-	return nil
+func (d Dictionary) Delete(word string) {
+	delete(d, word)
 }
