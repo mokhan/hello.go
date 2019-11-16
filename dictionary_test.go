@@ -23,18 +23,25 @@ func TestSearch(t *testing.T) {
 }
 
 func TestAdd(t *testing.T) {
-	dictionary := Dictionary{}
-	dictionary.Add("test", "this is just a test")
+	t.Run("new word", func(t *testing.T) {
+		dictionary := Dictionary{}
+		key := "test"
+		value := "this is just a test"
+		err := dictionary.Add(key, value)
 
-	want := "this is just a test"
-	got, err := dictionary.Search("test")
-	if err != nil {
-		t.Fatal("should find added word:", err)
-	}
+		assertNil(t, err)
+		assertDefinition(t, dictionary, key, value)
+	})
 
-	if want != got {
-		t.Errorf("got %q want %q", got, want)
-	}
+	t.Run("existing word", func(t *testing.T) {
+		key := "test"
+		value := "this is just a test"
+		dictionary := Dictionary{key: value}
+		err := dictionary.Add(key, "new test")
+
+		assertError(t, err, ErrorWordExists)
+		assertDefinition(t, dictionary, key, value)
+	})
 }
 
 func assertStrings(t *testing.T, got, want string) {
@@ -42,5 +49,24 @@ func assertStrings(t *testing.T, got, want string) {
 
 	if got != want {
 		t.Errorf("got %q want %q", got, want)
+	}
+}
+
+func assertDefinition(t *testing.T, dictionary Dictionary, key, expected string) {
+	t.Helper()
+
+	actual, err := dictionary.Search("test")
+	if err != nil {
+		t.Fatal("should find added key:", err)
+	}
+
+	if expected != actual {
+		t.Errorf("actual %q want %q", actual, expected)
+	}
+}
+
+func assertNil(t *testing.T, actual error) {
+	if actual != nil {
+		t.Errorf("expected nil got %q", actual)
 	}
 }
