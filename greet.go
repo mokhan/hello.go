@@ -14,7 +14,7 @@ func MyGreeterHandler(w http.ResponseWriter, r *http.Request) {
 	Greet(w, "world")
 }
 
-func main() {
-	//Greet(os.Stdout, "Elodie")
-	http.ListenAndServe(":5000", http.HandlerFunc(MyGreeterHandler))
-}
+//func main() {
+////Greet(os.Stdout, "Elodie")
+//http.ListenAndServe(":5000", http.HandlerFunc(MyGreeterHandler))
+//}
